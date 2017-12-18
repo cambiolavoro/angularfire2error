@@ -18,7 +18,7 @@ export class HomePage {
   constructor(
     public navCtrl: NavController,
     public alertCtrl: AlertController,
-    afDatabase: AngularFireDatabase,
+    public afDatabase: AngularFireDatabase,
     public actionSheetCtrl: ActionSheetController
   ) {
     this.songs = afDatabase.list('/songs').valueChanges();
@@ -47,7 +47,7 @@ export class HomePage {
         {
           text: 'Salva',
           handler: data => {
-            const newSongRef = this.songs.push({});
+            const newSongRef = this.afDatabase.list('/songs').push({});
 
             newSongRef.set({
               id: newSongRef.key,
@@ -88,7 +88,7 @@ export class HomePage {
     actionSheet.present();
   }
   removeSong(songId: string) {
-    this.songs.remove(songId);
+    this.afDatabase.list('/songs').remove(songId);
   }
   updateSong(songId, songTitle) {
     let prompt = this.alertCtrl.create({
@@ -111,7 +111,7 @@ export class HomePage {
         {
           text: 'Save',
           handler: data => {
-            this.songs.update(songId, {
+            this.afDatabase.list('/songs').update(songId, {
               title: data.title
             });
           }
